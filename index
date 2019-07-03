@@ -1,0 +1,55 @@
+// <Fab
+          //   active={this.state.active}
+          //   direction="up"
+          //   containerStyle={{ }}
+          //   style={{ backgroundColor: '#5067FF' }}
+          //   position="bottomRight"
+          //   //onPress={() => this.setState({ active: !this.state.active })}>
+          //   //<Icon name="share" />
+          // </Fab>
+
+          <AwesomeAlert
+				          show={showAlert}
+				          showProgress={false}
+				          title="AwesomeAlert"
+				          message="I have a message for you!"
+				          closeOnTouchOutside={true}
+				          closeOnHardwareBackPress={false}
+				          showCancelButton={true}
+				          showConfirmButton={true}
+				          cancelText="No, cancel"
+				          confirmText="Yes, delete it"
+				          confirmButtonColor="#DD6B55"
+				          onCancelPressed={() => {
+				            this.hideAlert();
+				          }}
+				          onConfirmPressed={() => {
+				            this.hideAlert();
+				          }}
+				        />
+
+<FlatGrid
+            itemDimension={130}
+            items={items}
+            style={styles.gridView}
+            // staticDimension={300}
+            // fixed
+             spacing={20}
+            renderItem={({ item, index }) => (
+              <View style={[styles.itemContainer, { backgroundColor: item.code }]}>
+                <View>
+                  <Text style={styles.itemDate}>24 Juni</Text>
+                </View>
+                <View>
+                  <Text style={styles.itemTitle}>Title</Text>
+                </View>
+                <View>
+                  <Text style={styles.itemNote}>Note</Text>
+                </View>
+                <View style={{height: 75}}>
+                  <Text numberOfLines={4} style={styles.itemTitle}>Lorem </Text>
+                </View>
+                
+              </View>
+            )}
+          />

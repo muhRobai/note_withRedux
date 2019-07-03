@@ -24,6 +24,21 @@ export default notes = (state = initialState, action) => {
                 isError: false,
                 data: action.payload.data.data
             }
+        case 'POST_NOTE_PENDING':
+            return{
+                isLoading: true
+            }
+        case 'POST_NOTE_REJECTED':
+            return{
+                isLoading: false,
+                isError: true,
+            }
+        case 'POST_NOTE_FULFILLED':
+            return{
+                ...state,
+                isLoading: true,
+                data: [action.payload.data.values].concat(...state.data)
+            }
 
         // example when updating/deleting and not getting all notes again
         // case 'UPDATE_NOTE_FULFILLED':

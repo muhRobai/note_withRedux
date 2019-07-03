@@ -3,8 +3,9 @@ import {  Container, Header, Title, Content,Form, Input, Item, Button, Left, Rig
 import { Dimensions,Modal, Alert, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity,TextInput } from 'react-native';
 import { createStackNavigator, createAppContainer, createDrawerNavigator,DrawerItems, SafeAreaView} from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
-import {getCategory} from '../public/redux/action/category';
+import {getCategory,postCategory,deleteCategory} from '../public/redux/action/category';
 
 class Costumside extends Component{
 	constructor(props) {
@@ -13,27 +14,22 @@ class Costumside extends Component{
 	  	modalVisible:false,
 	  	nameCategory:'',
 	  	iconCategory:'',
-	  	// Data : [
-		  // 	{	
-		  // 		id : 1,
-		  // 		name:"Person",
-		  // 		icon:"user-circle",
-		  // 	},
-		  // 	{
-		  // 		id: 2,
-		  // 		name:"Work",
-		  // 		icon:"briefcase"
-		  // 	},
-		  // 	{
-		  // 		id: 3,
-		  // 		name:"Wishlist",
-		  // 		icon:"list-alt"
-		  // 	}
-	  	// ]
+	  	showAlert: false
 	  }
-	
-	  
 	}
+
+	showAlert = (id) => {
+		this.props.dispatch(deleteCategory(id))
+    	this.setState({
+      		showAlert: true
+	    })
+	 }
+ 
+  	hideAlert = () => {
+    this.setState({
+      showAlert: false
+	    })
+	 }
 
 	fetchData = () => {
 		this.props.dispatch(getCategory());
@@ -47,18 +43,24 @@ class Costumside extends Component{
     	this.setState({modalVisible: visible});
  	}
 
- 	addCategoryRoutes = (data) =>{
- 		// this.props.dispatch(postCategory(data))
- 		console.warn(data);
+ 	addCategoryRoutes = (eee) =>{
+ 		 this.props.dispatch(postCategory(eee))
+ 		 this.props.dispatch(getCategory())
+ 		 this.setState({
+ 		 		modalVisible:false
+ 		 })
+ 		// console.warn(data);
  	}
 
  	_keyExtractor = (item, index) => item.id.toString();
 
  	renderItem = ({item, index}) =>(
- 		<TouchableOpacity>
  			<ListItem
 				noBorder
-				style={{margin: -5}}>
+				style={{margin: -5, backgroundColor: '#eee', marginTop: 20}}
+				onLongPress={() =>{this.showAlert(item.id)}}
+
+			>
 				<Left>
 					<Icon 
 						name={item.image}
@@ -66,11 +68,10 @@ class Costumside extends Component{
 					<Text style={{fontSize: 18, color: '#000000', fontWeight:"500"}}>{item.category}</Text>
 				</Left>
 			</ListItem>
- 		</TouchableOpacity>
  	)
 
 	render(){
-
+		console.warn(this.state.id)
 
 		return(
 			<Container>
@@ -155,7 +156,7 @@ class Costumside extends Component{
 				            		<List>
 				            			<ListItem
 				            			noBorder>
-				            				<TouchableOpacity onPress={()=> {this.addCategoryRoutes({catgory : this.state.nameCategory, image: this.state.iconCategory})}} style={{marginRight: 20}}>
+				            				<TouchableOpacity onPress={()=> {this.addCategoryRoutes({category : this.state.nameCategory, image: this.state.iconCategory})}} style={{marginRight: 20}}>
 				            					<Text style={{color: '#000', fontWeight:"600"}}>Add</Text>
 				            				</TouchableOpacity>
 				            				<TouchableOpacity onPress={()=> {this.setModalVisible(!this.state.modalVisible); }}>
@@ -168,6 +169,25 @@ class Costumside extends Component{
 			            </View>
 		            </View>
 		          </Modal>
+		          <AwesomeAlert
+		              show={this.state.showAlert}
+		              showProgress={false}
+		              title="WARNING"
+		              message="Are you sure delete data?"
+		              closeOnTouchOutside={true}
+		              closeOnHardwareBackPress={false}
+		              showCancelButton={true}
+		              showConfirmButton={true}
+		              cancelText="No"
+		              confirmText="Yes"
+		              confirmButtonColor="#DD6B55"
+		              onCancelPressed={() => {
+		                this.hideAlert();
+		              }}
+		              onConfirmPressed={() => {
+		                this.hideAlert();
+		              }}
+		           />
 			</Container>
 		)
 	}

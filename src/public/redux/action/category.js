@@ -10,12 +10,34 @@ export const getCategory = () => {
 	}
 }
 
-export const postCategory = () =>{
+export const postCategory = (eee) =>{
 	return {
 		type: 'POST_CATEGORY',
-		payload: axios.post()
+		payload: axios.post('http://192.168.100.17:3001/categories',{category: eee.category, image: eee.image})
 	}
 }
+
+export const deleteCategory = (id) =>{
+	console.warn(id)
+	return{
+		type: 'DELETE_CATEGORY',
+		payload: axios.delete(`http://192.168.100.17:3001/categories/${id}`)
+	}
+}
+
+export const updateCategory = () =>{
+	return{
+		type: 'UPPDATE_CATEGORY',
+		payload: axios.patch()
+	}
+}
+
+// export const deleteCategory = (data) =>{
+// 	return{
+// 		type: 'DELETE_CATEGORY',
+// 		payload : axios.delete('http://192.168.100.17:3001/categories/',{data.id})
+// 	}
+// }
 
 // export const updateNote = (id) => {
 //     return {

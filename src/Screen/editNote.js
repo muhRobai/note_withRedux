@@ -2,9 +2,11 @@ import { View,Image } from "react-native";
 import React, { Component } from 'react';
 import { Container, Header, Left, Form, Body, Right,Input, Textarea,Picker, Button, Icon, Title, Text, Thumbnail, Content, Label } from 'native-base';
 import {StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
 import dummycategory from '../component/dummyCategory';
+import {updateNotes, getNotes} from '../public/redux/action/notes'
 
-export default class Note extends Component {
+class editNote extends Component {
     static navigationOptions ={
       drawerIcon:(
         <Image source={require('../image/portfolio.png')} style={{ height: 24, width: 24}}/>
@@ -16,25 +18,40 @@ export default class Note extends Component {
       selected: undefined,
       title: this.props.navigation.state.params.title,
       body: this.props.navigation.state.params.note,
-      category: this.props.navigation.state.params.category,
+      category: this.props.navigation.state.params.id_category,
+      id: this.props.navigation.state.params.id
+
     };
       }
-    onValueChange(value: string) {
+    onValueChange(value) {
       this.setState({
-        selected: value
+        selected: value,
+        category: value
       });
     }
 
-    dummycategory = () => {
-      let dummydata = []
-      for(let i = 0; i < dummycategory.length; i++){
-        dummydata.push(
-            <Picker.Item key={i} label={dummycategory[i].category} value={dummycategory[i].category}/>
-        )
-      }
-      return dummydata;
+    inpunValue(value){
+      this.setState({
+        title: value
+      });
     }
 
+    bodyValue(value){
+      this.setState({
+        body: value
+      })
+    }
+
+    editNoteRoute = () =>{
+      const id = this.state.id
+      const id_category = this.state.category
+      const title = this.state.title
+      const note = this.state.body
+
+      this.props.dispatch(updateNotes(id,{title, note, id_category}))
+    }
+
+    
   render() {
     return (
       <Container>
@@ -48,15 +65,18 @@ export default class Note extends Component {
             <Title style={{color: '#000'}}>EDIT NOTE</Title>
         </Body>
         <Right style={{flex:1}}>
-            <Button transparent onPress= {() => this.props.navigation.openDrawer()} style={{padding: 10}}>
+            <Button transparent onPress= {() => {
+              this.editNoteRoute(),
+              this.props.navigation.goBack()
+            }} style={{padding: 10}}>
                <Thumbnail square style={{ width: 30, height: 30, alignItems: 'center', paddingRight: 15}}source={ require('../image/checked.png')}/>
             </Button>
         </Right>
       </Header>
         <Content>
             <Form>
-                <Input value={this.state.title} placeholderIconColor='#ecf0f1' style={styles.textStyle}/>
-                <Textarea rowSpan={12} value={this.state.body} style={styles.textAreaStyle}/>
+                <Input value={this.state.title} placeholderIconColor='#ecf0f1' style={styles.textStyle} onChangeText={(text) => {this.inpunValue(text)}}/>
+                <Textarea rowSpan={12} value={this.state.body} style={styles.textAreaStyle} onChangeText={(text) => {this.bodyValue(text)}}/>
                 <Label style={styles.labelstyle}>Category</Label>
                 <Picker
                   mode="dropdown"
@@ -66,8 +86,12 @@ export default class Note extends Component {
                   placeholderIconColor="#007aff"
                   style={styles.pickerStyle}
                   selectedValue={this.state.category}
-                  onValueChange={()=>this.onValueChange()}>
-                  {this.dummycategory()}
+                  onValueChange={(val)=>this.onValueChange(val)}>
+                  {this.props.category.data.map(item =>(
+                    <Picker.Item key={item.id} label={item.category} value={item.id_category}/>
+                    )
+                  )}
+                  
                 </Picker>
             </Form>
         </Content>
@@ -75,6 +99,16 @@ export default class Note extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+      category: state.category,
+    
+      // auth: state.auth
+  }
+}
+
+export default connect(mapStateToProps)(editNote)
 
 const styles = StyleSheet.create({
     textStyle: {

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import {  Container, Header, Title, Content,Form, Input, Item, Button, Left, Right, Body, Icon, Fab, List, Thumbnail, ListItem } from 'native-base';
-import { Dimensions,Modal, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
-import axios from 'axios';
-import dummyData from '../component/dummyData';
-
+import { Dimensions,Modal, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity, ActivityIndicator} from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
-import {getNotes} from '../public/redux/action/notes'
+import {getNotes, deleteNotes} from '../public/redux/action/notes';
 
 
 
@@ -22,9 +19,7 @@ constructor(props) {
   super(props);
   this.state = {
     modalVisible: false,
-    // sort: 'desc',
-    // notes: [],
-    // sql: `http://192.168.100.17:3001/notes?sort=asc`
+    id: ''
   }
 }
 
@@ -33,18 +28,25 @@ setModalVisible(visible) {
 }
 
 fetchData = () => {
-        this.props.dispatch(getNotes());
-    }
+    this.props.dispatch(getNotes());
+}
 
-componentDidMount = () => {
-        this.fetchData();
-    // axios.get(this.state.sql)
-    // .then((response)=>{
-    //   this.setState({
-    //     notes: response.data.data
-    //   })
-    // })
+componentWillMount = () => {
+    this.fetchData();
 };
+
+deleteNoteRoute = (id) =>{
+  this.setState({
+    showAlert: true,
+    id : id
+  })
+}
+
+hideAlert = () => {
+  this.setState({
+    showAlert: false
+    })
+ }
 
 _keyExtractor = (item, index) => item.id.toString();
 
@@ -54,6 +56,7 @@ renderItem = ({item, index}) =>(
         paddingLeft: 10
         }}
         onPress={()=> this.props.navigation.navigate('Edit', item)}
+        onLongPress={()=> this.deleteNoteRoute(item.id)}
         >
         <View style={{
           backgroundColor: 
@@ -93,7 +96,6 @@ setDate = (datenote) => {
 }
 
   render() {
-      //console.warn(this.props.notes)
     return (
       <Container>
         <Header style={{backgroundColor: '#fff'}}>
@@ -117,6 +119,9 @@ setDate = (datenote) => {
             <Input style={styles.input} placeholder="Search"/>
           </Item>
         <Content>
+          { (this.props.notes.isError) ? <Text style={[styles.notFound, {marginLeft: 20}]}>Error Get Notes</Text> :
+          (this.props.notes.isLoading) ?
+          <ActivityIndicator size="large" color="#333333" /> :
         <View style={{flex: 1}}>
           <FlatList
             style={styles.gridView}
@@ -124,8 +129,9 @@ setDate = (datenote) => {
             numColumns={2}
             keyExtractor={this._keyExtraktor}
             renderItem={this.renderItem}
+            //onRefresh={this.fetchData()}
           />
-        </View>
+        </View>}
          </Content>
          <Fab
               direction="up"
@@ -190,6 +196,26 @@ setDate = (datenote) => {
               </View>
             </View>
           </Modal>
+          <AwesomeAlert
+		              show={this.state.showAlert}
+		              showProgress={false}
+		              title="WARNING"
+		              message="Are you sure delete data?"
+		              closeOnTouchOutside={true}
+		              closeOnHardwareBackPress={false}
+		              showCancelButton={true}
+		              showConfirmButton={true}
+		              cancelText="No"
+		              confirmText="Yes"
+		              confirmButtonColor="#DD6B55"
+		              onCancelPressed={() => {
+		                this.hideAlert();
+		              }}
+		              onConfirmPressed={() => {
+                    this.props.dispatch(deleteNotes(this.state.id))
+		                this.hideAlert();
+		              }}
+		           />
        </Container>
     );
   }

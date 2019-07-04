@@ -40,7 +40,7 @@ export default category = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                data: [action.payload.data.values].concat(...state.data)
+                data: action.payload.data.values.concat(...state.data)
             }
         case 'DELETE_CATEGORY_PENDING':
             return{
@@ -52,7 +52,6 @@ export default category = (state = initialState, action) => {
                 isError: true
             }
         case 'DELETE_CATEGORY_FULFILLED':
-            console.warn("masuk delete")
             return{
                 isLoading: true,
                 data: action.payload.data.values

@@ -1,3 +1,4 @@
+
 const initialState = {
     number: 10,
     data: [],
@@ -26,18 +27,54 @@ export default notes = (state = initialState, action) => {
             }
         case 'POST_NOTE_PENDING':
             return{
+                ...state,
                 isLoading: true
             }
         case 'POST_NOTE_REJECTED':
             return{
+                ...state,
                 isLoading: false,
                 isError: true,
             }
         case 'POST_NOTE_FULFILLED':
             return{
                 ...state,
-                isLoading: true,
-                data: [action.payload.data.values].concat(...state.data)
+                isLoading: false,
+                data: action.payload.data.data
+            }
+        case 'UPDATE_NOTE_PENDING':
+            return{
+                ...state,
+                isLoading: true
+            }
+        case 'UPDATE_NOTE_REJECTED':
+            return{
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+        case 'UPDATE_NOTE_FULFILLED':
+            return{
+                ...state,
+                isLoading: false,
+                data: action.payload.data.data
+            }
+        case 'DELETE_NOTE_PENDING':
+            return{
+                ...state,
+                isLoading:true
+            }
+        case 'DELETE_NOTE_REJECTED':
+            return{
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+        case 'DELETE_NOTE_FULFILLED':
+            return{
+                ...state,
+                isLoading: false,
+                data: action.payload.data.data
             }
 
         // example when updating/deleting and not getting all notes again

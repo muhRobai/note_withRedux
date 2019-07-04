@@ -2,6 +2,7 @@ import { View,Image } from "react-native";
 import React, { Component } from 'react';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
+import {postNotes,getNotes} from '../public/redux/action/notes'
 
 import { 
   Container, 
@@ -31,6 +32,9 @@ class Note extends Component {
     super(props);
     this.state = {
       selected: '',
+      title:'',
+      notes:'',
+      id_category:'',
       showAlert: false
     };
     }
@@ -40,7 +44,11 @@ class Note extends Component {
         selected: value,
         
       });
-    }
+  }
+
+  addNotes = (note) =>{
+    this.props.dispatch(postNotes(note))
+  }
 
   showAlert = () => {
     this.setState({
@@ -74,8 +82,8 @@ class Note extends Component {
       </Header>
         <Content>
             <Form>
-                <Input placeholder="ADD TITLE..." placeholderIconColor='#ecf0f1' style={styles.textStyle}/>
-                <Textarea rowSpan={12} placeholder="ADD DESCRIPTION..."style={styles.textAreaStyle}/>
+                <Input placeholder="ADD TITLE..." placeholderIconColor='#ecf0f1' style={styles.textStyle} onChangeText={(text) => {this.setState({title: text})}}/>
+                <Textarea rowSpan={12} placeholder="ADD DESCRIPTION..."style={styles.textAreaStyle} onChangeText={(text) => {this.setState({notes: text})}}/>
                 <Label style={styles.labelstyle}>Category</Label>
                   <Picker
                     mode="dropdown"
@@ -87,11 +95,12 @@ class Note extends Component {
                     selectedValue={this.state.selected}
                     onValueChange={(hasil) => (
                       this.setState({
+                        id_category: hasil,
                         selected: hasil
                       })
                     )}>
                     {this.props.category.data.map(item =>(
-                      <Picker.Item label={item.category} value={item.category}/>
+                      <Picker.Item key={item.id} label={item.category} value={item.id_category}/>
                       )
                     )}
                   </Picker>
@@ -113,7 +122,9 @@ class Note extends Component {
                 this.hideAlert();
               }}
               onConfirmPressed={() => {
-                this.props.dispatch(getCategory());
+                this.addNotes({title: this.state.title, note: this.state.notes, id_category: this.state.id_category}),
+                this.hideAlert(),
+                this.props.navigation.goBack()
               }}
             />
       </Container>

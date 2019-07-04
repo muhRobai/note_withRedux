@@ -71,8 +71,6 @@ class Costumside extends Component{
  	)
 
 	render(){
-		console.warn(this.state.id)
-
 		return(
 			<Container>
 			    <Header style={styles.drawerHeader} noShadow={true}>

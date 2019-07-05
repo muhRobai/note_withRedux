@@ -1,4 +1,5 @@
 
+
 const initialState = {
     number: 10,
     data: [],
@@ -42,7 +43,7 @@ export default category = (state = initialState, action) => {
                 isLoading: true,
                 data: action.payload.data.values.concat(...state.data)
             }
-        case 'DELETE_CATEGORY_PENDING':
+        case 'DELETE_CATEGORY_PENDING':   
             return{
                 isLoading: false
             }
@@ -53,7 +54,7 @@ export default category = (state = initialState, action) => {
             }
         case 'DELETE_CATEGORY_FULFILLED':
             return{
-                isLoading: true,
+                isLoading: false,
                 data: action.payload.data.values
             }
         case 'UPPDATE_CATEGORY_PENDING':
@@ -67,7 +68,7 @@ export default category = (state = initialState, action) => {
             }
         case 'UPPDATE_CATEGORY_FULFILLED':
             return{
-                isLoading: true,
+                isLoading: false,
                 data: action.payload.data.values
             }
         // example when updating/deleting and not getting all notes again

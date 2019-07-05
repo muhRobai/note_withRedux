@@ -76,6 +76,23 @@ export default notes = (state = initialState, action) => {
                 isLoading: false,
                 data: action.payload.data.data
             }
+        case 'SEARCH_NOTE_PENDING':
+            return{
+                ...state,
+                isLoading:true
+            }
+        case 'SEARCH_NOTE_REJECTED':
+            return{
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+        case 'SEARCH_NOTE_FULFILLED':
+            return{
+                ...state,
+                isLoading: false,
+                data: action.payload.data.data
+            }
 
         // example when updating/deleting and not getting all notes again
         // case 'UPDATE_NOTE_FULFILLED':

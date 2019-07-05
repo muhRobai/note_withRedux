@@ -3,12 +3,27 @@ import axios from 'axios';
 let ip = 'http://192.168.100.17:3001/notes';
 
 // export action that get notes
-export const getNotes = () => {
-
+export const getNotes = (page) => {
+	if (page === undefined){
+		page = 1
+	}
     return {
         type: 'GET_NOTES',
-        payload: axios.get(ip)
+        payload: axios.get(`${ip}`)
     }
+}
+
+export const searctNotes = (search, sort) =>{
+	
+
+	if (sort === undefined){
+		sort = 'desc'
+	}
+	console.warn("ini console "+sort)
+	return{
+		type:'SEARCH_NOTE',
+		payload: axios.get(`${ip}?search=${search}&sort=${sort}`)
+	}
 }
 
 export const postNotes = (dataNote) =>{

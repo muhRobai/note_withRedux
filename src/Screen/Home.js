@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import {  Container, Header, Title, Content,Form, Input, Item, Button, Left, Right, Body, Icon, Fab, List, Thumbnail, ListItem } from 'native-base';
-import { Dimensions,Modal, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {  Container, Header, Title, Content,Form, Input, Item, Button, Left, Right, Body, Icon, Fab, List, Thumbnail } from 'native-base';
+import { Dimensions,Modal, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity, ActivityIndicator, RefreshControl} from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
-import {getNotes, deleteNotes} from '../public/redux/action/notes';
-
-
+import {getNotes, deleteNotes, searctNotes} from '../public/redux/action/notes';
 
 class Home extends Component {
  
@@ -19,8 +17,16 @@ constructor(props) {
   super(props);
   this.state = {
     modalVisible: false,
-    id: ''
+    id: '',
+    search:'',
+    refreshing: false
   }
+}
+
+sortRoute = (sort) =>{
+  this.setModalVisible(!this.state.modalVisible),
+  //console.warn(sort)
+  this.props.dispatch(searctNotes(this.state.search,sort))
 }
 
 setModalVisible(visible) {
@@ -29,16 +35,21 @@ setModalVisible(visible) {
 
 fetchData = () => {
     this.props.dispatch(getNotes());
+    this.setState({
+      refreshing: false
+    })
 }
 
 componentWillMount = () => {
+    
     this.fetchData();
 };
 
 deleteNoteRoute = (id) =>{
   this.setState({
     showAlert: true,
-    id : id
+    id : id,
+    
   })
 }
 
@@ -46,6 +57,10 @@ hideAlert = () => {
   this.setState({
     showAlert: false
     })
+ }
+
+ searchEnter = (event) =>{
+    this.props.dispatch(searctNotes(this.state.search))
  }
 
 _keyExtractor = (item, index) => item.id.toString();
@@ -95,6 +110,10 @@ setDate = (datenote) => {
   return fixDate
 }
 
+getDataAgain = () =>{
+  
+}
+
   render() {
     return (
       <Container>
@@ -116,23 +135,27 @@ setDate = (datenote) => {
           </Right>
         </Header>
           <Item style={{backgroundColor: 'transparent', borderBottomColor: 'transparent'}}>
-            <Input style={styles.input} placeholder="Search"/>
+            <Input style={styles.input} placeholder="Search" onChangeText={(text) => this.setState({
+              search:text
+            })}
+            onEndEditing={() => {this.searchEnter()}}
+            
+            />
           </Item>
-        <Content>
+
           { (this.props.notes.isError) ? <Text style={[styles.notFound, {marginLeft: 20}]}>Error Get Notes</Text> :
-          (this.props.notes.isLoading) ?
-          <ActivityIndicator size="large" color="#333333" /> :
-        <View style={{flex: 1}}>
-          <FlatList
-            style={styles.gridView}
-            data={this.props.notes.data}
-            numColumns={2}
-            keyExtractor={this._keyExtraktor}
-            renderItem={this.renderItem}
-            //onRefresh={this.fetchData()}
-          />
-        </View>}
-         </Content>
+          (this.props.notes.isLoading) ? <ActivityIndicator size="large" color="red" /> :
+            <View style={{flex: 1}}>
+              <FlatList
+                style={styles.gridView}
+                data={this.props.notes.data}
+                numColumns={2}
+                keyExtractor={this._keyExtractor}
+                renderItem={this.renderItem}
+                refreshing={this.state.refreshing}
+                onRefresh={()=> {this.fetchData()}}
+              />
+            </View>}
          <Fab
               direction="up"
               containerStyle={{ }}
@@ -147,7 +170,7 @@ setDate = (datenote) => {
             visible={this.state.modalVisible}
             onRequestClose={() => {
             Alert.alert('Modal has been closed.');
-          }}
+            }}
             onPress={() => {this.setModalVisible(!this.state.modalVisible); }}
             >
             <View style={
@@ -174,7 +197,9 @@ setDate = (datenote) => {
                 }}>
                     <TouchableHighlight
                       onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible);
+                        this.sortRoute('asc')
+                        // this.setModalVisible(!this.state.modalVisible),
+                        // this.fetchData()
                     }}>
                     <Text style={{fontSize: 14, fontWeight:"500", color: '#000000'}}>ASCENDING</Text>
                   </TouchableHighlight>
@@ -188,7 +213,7 @@ setDate = (datenote) => {
                   borderRadius: 7
                 }}>
                   <TouchableHighlight onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible);
+                        this.sortRoute('desc')
                     }}>
                     <Text style={{fontSize: 14,fontWeight:"500", color: '#000000'}}>DESCENDING</Text>
                   </TouchableHighlight>
@@ -234,8 +259,7 @@ const styles = StyleSheet.create({
   gridView: {
     marginTop: 5,
     marginLeft: 10,
-    marginRight: 20,
-    flex: 1
+    marginRight: 20
   },
   itemContainer: {
     justifyContent: 'flex-end',

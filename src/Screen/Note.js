@@ -75,7 +75,11 @@ class Note extends Component {
             <Title style={{color: '#000'}}>ADD NOTE</Title>
         </Body>
         <Right style={{flex:1}}>
-            <Button transparent onPress= {() => {this.showAlert()}} style={{padding: 10}}>
+            <Button transparent onPress= {() => {
+              this.addNotes({title: this.state.title, note: this.state.notes, id_category: this.state.id_category}),
+              this.showAlert()
+            }} 
+            style={{padding: 10}}>
                <Thumbnail square style={{ width: 30, height: 30, alignItems: 'center', paddingRight: 15}}source={ require('../image/checked.png')}/>
             </Button>
         </Right>
@@ -99,6 +103,7 @@ class Note extends Component {
                         selected: hasil
                       })
                     )}>
+                      <Picker.Item label="Choose Category"/>
                     {this.props.category.data.map(item =>(
                       <Picker.Item key={item.id} label={item.category} value={item.id_category}/>
                       )
@@ -109,20 +114,13 @@ class Note extends Component {
         <AwesomeAlert
               show={this.state.showAlert}
               showProgress={false}
-              title="WARNING"
-              message="Save Data?!"
+              message="Note Has been Saved!"
               closeOnTouchOutside={true}
               closeOnHardwareBackPress={false}
-              showCancelButton={true}
               showConfirmButton={true}
-              cancelText="No, cancel"
-              confirmText="Yes, Save it"
+              confirmText="OK"
               confirmButtonColor="#DD6B55"
-              onCancelPressed={() => {
-                this.hideAlert();
-              }}
               onConfirmPressed={() => {
-                this.addNotes({title: this.state.title, note: this.state.notes, id_category: this.state.id_category}),
                 this.hideAlert(),
                 this.props.navigation.goBack()
               }}

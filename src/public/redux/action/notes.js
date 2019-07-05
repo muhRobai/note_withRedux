@@ -13,13 +13,20 @@ export const getNotes = (page) => {
     }
 }
 
+export const pageNotes = (page) => {
+
+	return{
+		type:'PAGE_NOTES',
+		payload: axios.get(`${ip}?page=${page}`)
+	}
+}
+
 export const searctNotes = (search, sort) =>{
 	
 
 	if (sort === undefined){
 		sort = 'desc'
 	}
-	console.warn("ini console "+sort)
 	return{
 		type:'SEARCH_NOTE',
 		payload: axios.get(`${ip}?search=${search}&sort=${sort}`)
@@ -45,6 +52,15 @@ export const deleteNotes = (id) =>{
 	return{
 		type: 'DELETE_NOTE',
 		payload: axios.delete(`${ip}/${id}`)
+	}
+}
+export const getNotebyCateory = (search,page) =>{
+	if(page === undefined){
+		page = 1
+	}
+	return {
+		type: 'GET_NOTEbyCATEGORY',
+		payload: axios.get(`http://192.168.100.17:3001/categories?page=${page}&search=${search}`)
 	}
 }
 

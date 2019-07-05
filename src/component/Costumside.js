@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
 import {getCategory,postCategory,deleteCategory} from '../public/redux/action/category';
+import {getNotebyCateory} from '../public/redux/action/notes';
 
 class Costumside extends Component{
 	constructor(props) {
@@ -52,13 +53,19 @@ class Costumside extends Component{
  		 })
  	}
 
- 	_keyExtractor = (item, index) => item.id.toString();
+ 	_keyExtractor = (item) => item.id.toString();
 
- 	renderItem = ({item, index}) =>(
+ 	renderItem = ({item}) =>(
  			<ListItem
 				noBorder
 				style={{margin: -5}}
 				onLongPress={() =>{this.deleteCategoryRoute(item.id_category)}}
+				onPress={() => {
+					this.props.dispatch(getNotebyCateory(item.id_category))
+					this.props.navigation.closeDrawer()
+					//this.props.navigation.goBack()
+				
+				}}
 			>
 			<Left>
 				<Icon 

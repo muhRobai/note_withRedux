@@ -3,7 +3,8 @@ import {  Container, Header, Title, Content,Form, Input, Item, Button, Left, Rig
 import { Dimensions,Modal, TouchableHighlight, StyleSheet, View, Text,FlatLis, Image,FlatList, TouchableOpacity, ActivityIndicator, RefreshControl} from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
-import {getNotes, deleteNotes, searctNotes} from '../public/redux/action/notes';
+import {getNotes, deleteNotes, searctNotes, pageNotes} from '../public/redux/action/notes';
+let color = ['#F0706A','#68e47d','#6ad5d1','#bed56a','#d1c462','#d18746','#3c7fc2']
 
 class Home extends Component {
  
@@ -13,14 +14,27 @@ static navigationOptions ={
   )
 }
 
+
+
 constructor(props) {
   super(props);
   this.state = {
     modalVisible: false,
     id: '',
     search:'',
-    refreshing: false
+    refreshing: false,
+    page: 1
   }
+}
+
+pageNotes = () =>{
+   if (this.state.page !== this.props.notes.totalpage){
+    let page = this.state.page + 1
+    this.setState({
+      page: page
+    })
+    this.props.dispatch(pageNotes(page))
+   }
 }
 
 sortRoute = (sort) =>{
@@ -36,7 +50,8 @@ setModalVisible(visible) {
 fetchData = () => {
     this.props.dispatch(getNotes());
     this.setState({
-      refreshing: false
+      refreshing: false,
+      page: 1
     })
 }
 
@@ -74,12 +89,7 @@ renderItem = ({item, index}) =>(
         onLongPress={()=> this.deleteNoteRoute(item.id)}
         >
         <View style={{
-          backgroundColor: 
-          item.category.toLowerCase() == "horro" ? "#2FC2DF" :
-          item.category.toLowerCase() == "fantasi" ? "#C0EB6A" :
-          item.category.toLowerCase() == "action" ? "#FAD06C" :
-          item.category.toLowerCase() == "fiksi" ? "#FF92A9" :
-          "#1abc9c", borderRadius: 7, margin: 7}}>
+          backgroundColor: item.id_category==null ? "#1abc9c" : color[item.id_category], borderRadius: 7, margin: 7}}>
 
           <View>
               <Text style={styles.itemDate}>{this.setDate(item.date)}</Text>
@@ -110,9 +120,19 @@ setDate = (datenote) => {
   return fixDate
 }
 
-getDataAgain = () =>{
-  
-}
+renderFooter = () => {
+  return (
+      <View>
+      { (this.props.notes.Loading) ?
+          <View style={{paddingVertical: 12}}>  
+            <ActivityIndicator animating size='large' color="#333333" />
+          </View>
+        : null
+
+      }
+      </View>
+      )
+      }
 
   render() {
     return (
@@ -144,7 +164,9 @@ getDataAgain = () =>{
           </Item>
 
           { (this.props.notes.isError) ? <Text style={[styles.notFound, {marginLeft: 20}]}>Error Get Notes</Text> :
-          (this.props.notes.isLoading) ? <ActivityIndicator size="large" color="red" /> :
+          (this.props.notes.isLoading) ?
+              <ActivityIndicator size="large" color="#333333" /> : 
+          
             <View style={{flex: 1}}>
               <FlatList
                 style={styles.gridView}
@@ -154,6 +176,9 @@ getDataAgain = () =>{
                 renderItem={this.renderItem}
                 refreshing={this.state.refreshing}
                 onRefresh={()=> {this.fetchData()}}
+                ListFooterComponent={this.renderFooter}
+                onEndReachedThreshold={0.1}
+                onEndReached={this.pageNotes}
               />
             </View>}
          <Fab

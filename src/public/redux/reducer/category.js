@@ -55,7 +55,7 @@ export default category = (state = initialState, action) => {
         case 'DELETE_CATEGORY_FULFILLED':
             return{
                 isLoading: false,
-                data: action.payload.data.values
+                data: action.payload.data.data
             }
         case 'UPPDATE_CATEGORY_PENDING':
             return{

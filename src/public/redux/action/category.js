@@ -6,7 +6,7 @@ import axios from 'axios';
 export const getCategory = () => {
 	return {
 		type: 'GET_CATEGORY',
-		payload: axios.get('http://192.168.100.17:3001/categories')
+		payload: axios.get(`http://192.168.100.17:3001/categories`)
 	}
 }
 
@@ -24,10 +24,10 @@ export const deleteCategory = (id) =>{
 	}
 }
 
-export const updateCategory = () =>{
-	return{
-		type: 'UPDATE_CATEGORY',
-		payload: axios.patch()
+export const getNotebyCateory = (search) =>{
+	return {
+		type: 'GET_NOTEbyCATEGORY',
+		payload: axios.get(`http://192.168.100.17:3001/categories?search=${search}`)
 	}
 }
 

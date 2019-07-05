@@ -1,10 +1,13 @@
 
+
 const initialState = {
     number: 10,
     data: [],
     results: [],
     isLoading: false,
     isError: false,
+    totalPage:2,
+    searchCategory:false
 }
 
 // create a reducer for getting network from RESTful API
@@ -23,7 +26,8 @@ export default notes = (state = initialState, action) => {
             return {
                 isLoading: false,
                 isError: false,
-                data: action.payload.data.data
+                data: action.payload.data.data,
+                totalpage: action.payload.data.totalPage
             }
         case 'POST_NOTE_PENDING':
             return{
@@ -40,7 +44,8 @@ export default notes = (state = initialState, action) => {
             return{
                 ...state,
                 isLoading: false,
-                data: action.payload.data.data
+                data: action.payload.data.data,
+                totalpage: action.payload.data.totalPage
             }
         case 'UPDATE_NOTE_PENDING':
             return{
@@ -93,29 +98,44 @@ export default notes = (state = initialState, action) => {
                 isLoading: false,
                 data: action.payload.data.data
             }
-
-        // example when updating/deleting and not getting all notes again
-        // case 'UPDATE_NOTE_FULFILLED':
-        //     return {
-        //         isLoading: false,
-        //         isError: false,
-        //         data: {
-        //             ...state, // get all previous state
-
-                    // deleting from array
-                    // data: state.data.filter(note => {
-                        // note.login.username !== action.payload.data // when deleting
-                    // })
-
-                    // updating array
-                    // data: state.data.map((item, index) => {
-                    //     if(item.login.username === action.payload.data.login.username ){
-                    //         item = action.paypload.data // change note to newest one
-                    //     }
-                    //     return item;
-                    // })
-            //     }
-            // }
+        case "PAGE_NOTES_PENDING": 
+        
+        return {
+            ...state,
+            Loading: true
+        }
+        case "PAGE_NOTES_REJECTED": 
+        return {
+            ...state,
+            Loading: false,
+            isError: true
+        }
+        case "PAGE_NOTES_FULFILLED":
+        return {
+            ...state,
+            Loading: false,
+            data: state.data.concat(action.payload.data.data),
+            totalpage: action.payload.data.totalPage
+        }
+        case "GET_NOTEbyCATEGORY_PENDING":
+            return{
+                ...state,
+                isLoading:true
+            }
+        case "GET_NOTEbyCATEGORY_REJECTED":
+            return{
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+        case "GET_NOTEbyCATEGORY_FULFILLED":
+            return{
+                ...state,
+                isLoading: false,
+                searchCategory: true,
+                data: action.payload.data.data,
+                totalpage: action.payload.data.totalPage
+            }
 
         default:
             return state;

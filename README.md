@@ -51,5 +51,5 @@ $ react-native run-android
 ### Home Page
 ![](src/image/capture.png)
 
-### Video How to Apps Word
+### Video How to Apps Work
 ![](src/image/Video.gif)

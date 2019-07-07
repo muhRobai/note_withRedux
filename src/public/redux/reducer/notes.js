@@ -1,12 +1,10 @@
 
 
 const initialState = {
-    number: 10,
     data: [],
-    results: [],
     isLoading: false,
     isError: false,
-    totalPage:2,
+    totalPage:0,
     searchCategory:false
 }
 
@@ -96,7 +94,9 @@ export default notes = (state = initialState, action) => {
             return{
                 ...state,
                 isLoading: false,
-                data: action.payload.data.data
+                data: action.payload.data.data,
+                totalpage: 1
+                
             }
         case "PAGE_NOTES_PENDING": 
         

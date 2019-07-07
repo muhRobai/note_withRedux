@@ -78,7 +78,7 @@ hideAlert = () => {
     this.props.dispatch(searctNotes(this.state.search))
  }
 
-_keyExtractor = (item, index) => item.id.toString();
+_keyExtractor = (item, index) => item.id+'';
 
 renderItem = ({item, index}) =>(
     <TouchableOpacity style={{

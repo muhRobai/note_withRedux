@@ -1,6 +1,12 @@
  // import axios for getting data from API
 import axios from 'axios';
-let ip = 'http://192.168.100.17:3001/notes';
+
+//===========================================
+// change ip here 
+//===========================================
+// let ip = 'http://192.168.100.17:3001/notes';
+
+let ip = 'http://192.168.43.180:3001/notes'; 
 
 // export action that get notes
 export const getNotes = (page) => {
@@ -22,8 +28,6 @@ export const pageNotes = (page) => {
 }
 
 export const searctNotes = (search, sort) =>{
-	
-
 	if (sort === undefined){
 		sort = 'desc'
 	}

@@ -53,6 +53,8 @@ $ react-native run-android
     <img width="250" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/Video.gif">    
 </div>
 
+## APK Release
+For APK release kilk [here](https://drive.google.com/open?id=1aMNhH0uLyvsB_60kzD5jAzahq6kJZPtB).
 
 ## Repo Before
 Backend Repo [here](https://github.com/muhRobai/NoteApi).

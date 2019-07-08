@@ -49,7 +49,7 @@ $ react-native run-android
 
 ## EXAMPLE
 <div align="center">
-     <img width="257" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/capture.png">
+     <img width="255" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/capture.png">
     <img width="250" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/Video.gif">    
 </div>
 

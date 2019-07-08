@@ -49,12 +49,11 @@ $ react-native run-android
 
 ## EXAMPLE
 <div align="center">
-     <img width="255" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/capture.png">
+     <img width="254" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/capture.png">
     <img width="250" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/Video.gif">    
 </div>
 
-## APK Release
-Backend Repo [here](https://github.com/muhRobai/NoteApi).
 
 ## Repo Before
+Backend Repo [here](https://github.com/muhRobai/NoteApi).
 Front End Repo [here](https://github.com/muhRobai/NoteApp_UI_ReactNative).

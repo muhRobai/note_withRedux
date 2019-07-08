@@ -54,4 +54,7 @@ $ react-native run-android
 </div>
 
 ## APK Release
-For test this app, you can download it [here](https://drive.google.com/open?id=1aMNhH0uLyvsB_60kzD5jAzahq6kJZPtB).
+Backend Repo [here](https://github.com/muhRobai/NoteApi).
+
+## Repo Before
+Front End Repo [here](https://github.com/muhRobai/NoteApp_UI_ReactNative).

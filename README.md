@@ -29,7 +29,7 @@ https://facebook.github.io/react-native/docs/getting-started
 
 
 ## INSTALLATION
-1. you must install the API 
+1. you must install the API (Backend REPO)
 ```
 https://github.com/muhRobai/NoteApi
 ```
@@ -48,8 +48,10 @@ $ react-native run-android
 ```
 
 ## EXAMPLE
-### Home Page
-![](src/image/capture.png)
+<div align="center">
+     <img width="250" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/capture.png">
+    <img width="250" src="https://github.com/muhRobai/note_withRedux/blob/master/src/image/Video.gif">    
+</div>
 
-### Video How to Apps Work
-![](src/image/Video.gif)
+## APK Release
+For test this app, you can download it [here](https://drive.google.com/open?id=1aMNhH0uLyvsB_60kzD5jAzahq6kJZPtB-).
